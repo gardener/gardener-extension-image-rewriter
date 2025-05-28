@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: extension-image-rewriter
+  namespace: {{ .Release.Namespace }}
+data:
+  config.yaml: |-
+    {{- include "config" . | nindent 4 }}

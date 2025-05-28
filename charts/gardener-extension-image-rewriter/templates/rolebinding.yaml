@@ -1,0 +1,18 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gardener-extension-image-rewriter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: gardener-extension-image-rewriter
+    helm.sh/chart: gardener-extension-image-rewriter
+    app.kubernetes.io/instance: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: gardener-extension-image-rewriter
+subjects:
+- kind: ServiceAccount
+  name: gardener-extension-image-rewriter
+  namespace: {{ .Release.Namespace }}

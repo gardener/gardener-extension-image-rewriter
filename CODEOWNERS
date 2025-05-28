@@ -1,2 +1,6 @@
-# <repo name> maintainers
-*   @gardener/<maintainer team>
+# See the OWNERS docs at https://go.k8s.io/owners
+
+reviewers:
+- image-rewriter-reviewers
+approvers:
+- image-rewriter-approvers
