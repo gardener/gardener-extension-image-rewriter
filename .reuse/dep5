@@ -13,7 +13,6 @@ Files:
   .github
   .gitignore
   .golangci.yaml
-  .test-defs
   OWNERS
   OWNERS_ALIASES
   VERSION
@@ -22,12 +21,7 @@ Files:
   go.mod
   go.sum
   hack/api-reference/*.json
-  local-setup
-  pkg/component/registrycaches/monitoring/dashboard.json
-  pkg/component/registrycaches/templates/config.yml.tpl
-  skaffold-operator.yaml
-  skaffold.yaml
-Copyright: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+Copyright: 2025 SAP SE or an SAP affiliate company and Gardener contributors
 License: Apache-2.0
 
 # --------------------------------------------------
@@ -35,7 +29,7 @@ License: Apache-2.0
 Files:
   docs/**
   *.md
-Copyright: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+Copyright: 2025 SAP SE or an SAP affiliate company and Gardener contributors
 License: CC-BY-4.0
 
 # --------------------------------------------------
