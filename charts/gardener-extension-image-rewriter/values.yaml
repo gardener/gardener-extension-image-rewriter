@@ -28,8 +28,7 @@ vpa:
 healthPort: 8081
 
 controllers:
-  extension:
-    concurrentSyncs: 5
+  concurrentSyncs: 5
   heartbeat: 
     renewIntervalSeconds: 30 
   ignoreOperationAnnotation: false
