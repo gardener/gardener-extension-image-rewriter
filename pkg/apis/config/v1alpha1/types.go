@@ -33,7 +33,7 @@ type TargetConfiguration struct {
 	// Provider is the name of the provider for which this target is applicable.
 	Provider string `json:"provider"`
 	// Regions are the regions where the target image is located.
-	Regions []string `json:"region"`
+	Regions []string `json:"regions"`
 }
 
 // Image contains information about an image.

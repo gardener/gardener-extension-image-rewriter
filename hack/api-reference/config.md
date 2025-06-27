@@ -173,7 +173,7 @@ string
 </tr>
 <tr>
 <td>
-<code>region</code></br>
+<code>regions</code></br>
 <em>
 []string
 </em>
