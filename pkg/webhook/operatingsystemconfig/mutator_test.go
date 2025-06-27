@@ -51,7 +51,7 @@ var _ = Describe("Mutator", func() {
 						{
 							Image:    v1alpha1.Image{Prefix: ptr.To("registry.north.local/replicas")},
 							Provider: "local",
-							Region:   "north",
+							Regions:  []string{"north"},
 						},
 					},
 				},
@@ -61,7 +61,7 @@ var _ = Describe("Mutator", func() {
 						{
 							Image:    v1alpha1.Image{Image: ptr.To("local-north-sandbox-image:latest")},
 							Provider: "local",
-							Region:   "north",
+							Regions:  []string{"north"},
 						},
 					},
 				},

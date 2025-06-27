@@ -62,7 +62,7 @@ var _ = Describe("Validation", func() {
 				"Field": Equal("overwrites[0].targets[0].provider"),
 			})), PointTo(MatchFields(IgnoreExtras, Fields{
 				"Type":  Equal(field.ErrorTypeRequired),
-				"Field": Equal("overwrites[0].targets[0].region"),
+				"Field": Equal("overwrites[0].targets[0].regions"),
 			}))))
 		})
 
@@ -73,7 +73,7 @@ var _ = Describe("Validation", func() {
 					Image: ptr.To("foo/bar:latest"),
 				},
 				Provider: "local",
-				Region:   "local",
+				Regions:  []string{"local"},
 			}}
 
 			Expect(ValidateConfiguration(config)).To(ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
@@ -92,7 +92,7 @@ var _ = Describe("Validation", func() {
 					Prefix: ptr.To("foo"),
 				},
 				Provider: "local",
-				Region:   "local",
+				Regions:  []string{"local"},
 			}}
 
 			Expect(ValidateConfiguration(config)).To(ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
@@ -101,6 +101,22 @@ var _ = Describe("Validation", func() {
 			})), PointTo(MatchFields(IgnoreExtras, Fields{
 				"Type":  Equal(field.ErrorTypeForbidden),
 				"Field": Equal("overwrites[0].targets[0].prefix"),
+			}))))
+		})
+
+		It("should validate region is not empty", func() {
+			config.Overwrites[0].Source.Image = ptr.To("foo/bar:latest")
+			config.Overwrites[0].Targets = []v1alpha1.TargetConfiguration{{
+				Image: v1alpha1.Image{
+					Image: ptr.To("foo/bar:latest"),
+				},
+				Provider: "local",
+				Regions:  []string{""},
+			}}
+
+			Expect(ValidateConfiguration(config)).To(ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":  Equal(field.ErrorTypeInvalid),
+				"Field": Equal("overwrites[0].targets[0].regions[0]"),
 			}))))
 		})
 	})

@@ -173,13 +173,13 @@ string
 </tr>
 <tr>
 <td>
-<code>region</code></br>
+<code>regions</code></br>
 <em>
-string
+[]string
 </em>
 </td>
 <td>
-<p>Region is the region where the target image is located.</p>
+<p>Regions are the regions where the target image is located.</p>
 </td>
 </tr>
 </tbody>

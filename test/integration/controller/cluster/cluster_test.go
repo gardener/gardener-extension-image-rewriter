@@ -68,7 +68,7 @@ var _ = Describe("Cluster controller test", func() {
 							{
 								Image:    v1alpha1.Image{Prefix: ptr.To("registry.central.local/gardener-project")},
 								Provider: "local",
-								Region:   "central",
+								Regions:  []string{"central"},
 							},
 						},
 					},

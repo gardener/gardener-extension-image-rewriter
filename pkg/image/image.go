@@ -89,7 +89,10 @@ func NewImageConfiguration(config *v1alpha1.Configuration) Configuration {
 					regionToTarget: make(map[string]string),
 				}
 			}
-			providerToTarget[t.Provider].regionToTarget[t.Region] = prefixOrImage(t.Image)
+
+			for _, region := range t.Regions {
+				providerToTarget[t.Provider].regionToTarget[region] = prefixOrImage(t.Image)
+			}
 		}
 
 		overwrites = append(overwrites, overwrite{
