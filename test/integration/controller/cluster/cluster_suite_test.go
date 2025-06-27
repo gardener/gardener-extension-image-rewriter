@@ -33,9 +33,7 @@ func TestCluster(t *testing.T) {
 	RunSpecs(t, "Test Integration Controller Cluster Suite")
 }
 
-const (
-	testID = "clustercontroller-test"
-)
+const testID = "clustercontroller-test"
 
 var (
 	ctx       = context.Background()
@@ -101,16 +99,6 @@ var _ = BeforeSuite(func() {
 	By("Setup manager")
 	mgr, err = manager.New(restConfig, manager.Options{
 		Scheme: scheme,
-		//Cache:  cache.Options{
-		//	ByObject: map[client.Object]cache.ByObject{
-		//		&extensionsv1alpha1.Cluster{}: {
-		//			Label: labels.SelectorFromSet(labels.Set{testID: testRunID}),
-		//		},
-		//		&corev1.Secret{}: {
-		//			Label: labels.SelectorFromSet(labels.Set{testID: testRunID}),
-		//		},
-		//	},
-		//},
 		Controller: controllerconfig.Controller{
 			SkipNameValidation: ptr.To(true),
 		},

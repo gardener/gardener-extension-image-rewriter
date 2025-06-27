@@ -37,12 +37,12 @@ var _ = Describe("Image", func() {
 						{
 							Image:    v1alpha1.Image{Image: imageReplacement("west")},
 							Provider: "local",
-							Region:   "west",
+							Regions:  []string{"west"},
 						},
 						{
 							Image:    v1alpha1.Image{Image: imageReplacement("east")},
 							Provider: "local",
-							Region:   "east",
+							Regions:  []string{"east"},
 						},
 					},
 				},
@@ -65,12 +65,12 @@ var _ = Describe("Image", func() {
 					{
 						Image:    v1alpha1.Image{Prefix: imageReplacementPrefix("west")},
 						Provider: "local2",
-						Region:   "west",
+						Regions:  []string{"west", "central"},
 					},
 					{
 						Image:    v1alpha1.Image{Prefix: imageReplacementPrefix("east")},
 						Provider: "local2",
-						Region:   "east",
+						Regions:  []string{"east"},
 					},
 				},
 			})
@@ -81,6 +81,9 @@ var _ = Describe("Image", func() {
 		It("should find the target image with prefix", func() {
 			expectedTargetImageWest := ptr.Deref(imageReplacementPrefix("west"), "") + "/foo:bar"
 			Expect(imageConfig.FindTargetImage(prefixSource+"/foo:bar", "local2", "west")).To(Equal(expectedTargetImageWest))
+
+			expectedTargetImageCentral := ptr.Deref(imageReplacementPrefix("west"), "") + "/foo:bar"
+			Expect(imageConfig.FindTargetImage(prefixSource+"/foo:bar", "local2", "central")).To(Equal(expectedTargetImageCentral))
 
 			expectedTargetImageEast := ptr.Deref(imageReplacementPrefix("east"), "") + "/foo:bar"
 			Expect(imageConfig.FindTargetImage(prefixSource+"/foo:bar", "local2", "east")).To(Equal(expectedTargetImageEast))

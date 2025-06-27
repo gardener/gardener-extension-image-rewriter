@@ -36,7 +36,7 @@ var _ = Describe("Mutator", func() {
 						{
 							Image:    v1alpha1.Image{Image: ptr.To("target-image:latest")},
 							Provider: "local",
-							Region:   "north",
+							Regions:  []string{"north"},
 						},
 					},
 				},
@@ -46,7 +46,7 @@ var _ = Describe("Mutator", func() {
 						{
 							Image:    v1alpha1.Image{Image: ptr.To("init-target-image:latest")},
 							Provider: "local",
-							Region:   "north",
+							Regions:  []string{"north"},
 						},
 					},
 				},

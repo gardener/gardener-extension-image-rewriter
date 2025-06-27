@@ -6,13 +6,13 @@ overwrites:
   targets:
   - prefix: "north.registry.gardener.cloud/gardener-project"
     provider: "local"
-    region: "north"
+    regions: ["north"]
   - prefix: "south.registry.gardener.cloud/gardener-project"
     provider: "local"
-    region: "south"
+    regions: ["south"]
   - prefix: "west.registry.gardener.cloud/gardener-project"
     provider: "local"
-    region: "west"
+    regions: ["west"]
   - prefix: "east.registry.gardener.cloud/gardener-project"
     provider: "local"
-    region: "east"
+    regions: ["east"]

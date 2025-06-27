@@ -98,6 +98,11 @@ func (in *ImageOverwrite) DeepCopy() *ImageOverwrite {
 func (in *TargetConfiguration) DeepCopyInto(out *TargetConfiguration) {
 	*out = *in
 	in.Image.DeepCopyInto(&out.Image)
+	if in.Regions != nil {
+		in, out := &in.Regions, &out.Regions
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 

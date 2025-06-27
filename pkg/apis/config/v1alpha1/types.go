@@ -32,8 +32,8 @@ type TargetConfiguration struct {
 	Image `json:",inline"`
 	// Provider is the name of the provider for which this target is applicable.
 	Provider string `json:"provider"`
-	// Region is the region where the target image is located.
-	Region string `json:"region"`
+	// Regions are the regions where the target image is located.
+	Regions []string `json:"region"`
 }
 
 // Image contains information about an image.
