@@ -19,8 +19,8 @@ import (
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/validation"
 	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
-	"github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/containerd"
-	operatingsystemconfigwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig"
+	containerdwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/containerd"
+	imagewebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/image"
 	podwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/pod"
 )
 
@@ -100,7 +100,7 @@ func ControllerSwitches() *cmd.SwitchOptions {
 func WebhookSwitchOptions() *webhookcmd.SwitchOptions {
 	return webhookcmd.NewSwitchOptions(
 		webhookcmd.Switch(podwebhook.Name, podwebhook.AddToManager),
-		webhookcmd.Switch(operatingsystemconfigwebhook.Name, operatingsystemconfigwebhook.AddToManager),
-		webhookcmd.Switch(containerd.Name, containerd.AddToManager),
+		webhookcmd.Switch(imagewebhook.Name, imagewebhook.AddToManager),
+		webhookcmd.Switch(containerdwebhook.Name, containerdwebhook.AddToManager),
 	)
 }

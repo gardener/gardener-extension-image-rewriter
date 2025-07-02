@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package operatingsystemconfig_test
+package image_test
 
 import (
 	"testing"
@@ -13,5 +13,5 @@ import (
 
 func TestOperatingSystemConfig(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Webhook OperatingSystemConfig Suite")
+	RunSpecs(t, "Webhook OperatingSystemConfig Image Suite")
 }
