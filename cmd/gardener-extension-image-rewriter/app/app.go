@@ -23,6 +23,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
 	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/containerd"
 	operatingsystemconfigwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig"
 	podwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/pod"
 )
@@ -92,6 +93,7 @@ func (o *Options) run(ctx context.Context) error {
 	o.extensionOptions.Completed().Apply(&clustercontroller.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&podwebhook.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&operatingsystemconfigwebhook.DefaultAddOptions.Config)
+	o.extensionOptions.Completed().Apply(&containerd.DefaultAddOptions.Config)
 	shootWebhookConfig, err := o.webhookOptions.Completed().AddToManager(ctx, mgr, nil, false)
 	if err != nil {
 		return fmt.Errorf("could not add the mutating webhook to manager: %w", err)

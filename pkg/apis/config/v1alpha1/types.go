@@ -14,9 +14,39 @@ import (
 type Configuration struct {
 	metav1.TypeMeta `json:",inline"`
 
+	// ContainerdConfiguration contains the containerd configuration for the image rewriter.
+	// +optional
+	Containerd *ContainerdConfiguration `json:"containerd,omitempty"`
 	// Overwrites configure the source and target images that should be replaced.
 	// +optional
 	Overwrites []ImageOverwrite `json:"overwrites,omitempty"`
+}
+
+// ContainerdConfiguration containes information about the containerd configuration.
+type ContainerdConfiguration struct {
+	// Provision contains the upstreams that should be configured for containerd during node bootstrap.
+	Provision []ContainerdUpstreamConfig `json:"bootstrap,omitempty"`
+	// Reconcile are the upstreams that should be configured for containerd.
+	Reconcile []ContainerdUpstreamConfig `json:"reconcile,omitempty"`
+}
+
+// ContainerdUpstreamConfig contains information about a containerd upstream configuration.
+type ContainerdUpstreamConfig struct {
+	// Upstream is the upstream name of the registry.
+	Upstream string `json:"upstream"`
+	// Server is the URL of the upstream registry.
+	Server string `json:"server"`
+	// Hosts are the containerd hosts separated by provider and regions.
+	Hosts []ContainerdHostConfig `json:"hosts,omitempty"`
+}
+
+// ContainerdHostConfig contains information about a containerd host configuration.
+type ContainerdHostConfig struct {
+	URL string `json:"url"`
+	// Provider is the name of the provider for which this target is applicable.
+	Provider string `json:"provider"`
+	// Regions are the regions where the target image is located.
+	Regions []string `json:"regions"`
 }
 
 // ImageOverwrite contains information about an image overwrite configuration.

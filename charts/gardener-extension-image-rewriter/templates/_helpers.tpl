@@ -7,6 +7,8 @@ apiVersion: config.image-rewriter.extensions.gardener.cloud/v1alpha1
 kind: Configuration
 overwrites:
 {{ toYaml .Values.overwrites | indent 2 }}
+containerd:
+{{ toYaml .Values.containerd | indent 2 }}
 {{- end -}}
 
 {{- define "configmap" -}}
