@@ -133,7 +133,7 @@ var _ = Describe("Mutator", func() {
 	})
 
 	Describe("#Mutate", func() {
-		Context("Provisioning OperatingSystemConfig", func() {
+		Context("Provision OperatingSystemConfig", func() {
 			BeforeEach(func() {
 				osc.Spec.Purpose = extensionsv1alpha1.OperatingSystemConfigPurposeProvision
 			})
@@ -168,7 +168,7 @@ var _ = Describe("Mutator", func() {
 			})
 		})
 
-		Context("Reconciling OperatingSystemConfig", func() {
+		Context("Reconcile OperatingSystemConfig", func() {
 			BeforeEach(func() {
 				osc.Spec.Purpose = extensionsv1alpha1.OperatingSystemConfigPurposeReconcile
 			})

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package image_test
+package containerd_test
 
 import (
 	"testing"
@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestImage(t *testing.T) {
+func TestContainerd(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Webhook OperatingSystemConfig Image Suite")
+	RunSpecs(t, "Webhook OperatingSystemConfig Containerd Suite")
 }
