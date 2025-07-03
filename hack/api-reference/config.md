@@ -28,7 +28,7 @@ Resource Types:
 <code>containerd</code></br>
 <em>
 <a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">
-ContainerdConfiguration
+[]ContainerdConfiguration
 </a>
 </em>
 </td>
@@ -60,103 +60,7 @@ ContainerdConfiguration
 <a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.Configuration">Configuration</a>)
 </p>
 <p>
-<p>ContainerdConfiguration containes information about the containerd configuration.</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>bootstrap</code></br>
-<em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdUpstreamConfig">
-[]ContainerdUpstreamConfig
-</a>
-</em>
-</td>
-<td>
-<p>Provision contains the upstreams that should be configured for containerd during node bootstrap.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>reconcile</code></br>
-<em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdUpstreamConfig">
-[]ContainerdUpstreamConfig
-</a>
-</em>
-</td>
-<td>
-<p>Reconcile are the upstreams that should be configured for containerd.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdHostConfig">ContainerdHostConfig
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdUpstreamConfig">ContainerdUpstreamConfig</a>)
-</p>
-<p>
-<p>ContainerdHostConfig contains information about a containerd host configuration.</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>url</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-<code>provider</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-<p>Provider is the name of the provider for which this target is applicable.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>regions</code></br>
-<em>
-[]string
-</em>
-</td>
-<td>
-<p>Regions are the regions where the target image is located.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdUpstreamConfig">ContainerdUpstreamConfig
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">ContainerdConfiguration</a>)
-</p>
-<p>
-<p>ContainerdUpstreamConfig contains information about a containerd upstream configuration.</p>
+<p>ContainerdConfiguration contains information about a containerd upstream configuration.</p>
 </p>
 <table>
 <thead>
@@ -199,6 +103,57 @@ string
 </td>
 <td>
 <p>Hosts are the containerd hosts separated by provider and regions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdHostConfig">ContainerdHostConfig
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">ContainerdConfiguration</a>)
+</p>
+<p>
+<p>ContainerdHostConfig contains information about a containerd host configuration.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>url</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>provider</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Provider is the name of the provider for which this target is applicable.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>regions</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>Regions are the regions where the target image is located.</p>
 </td>
 </tr>
 </tbody>

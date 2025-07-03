@@ -17,15 +17,12 @@ type UpStreamConfiguration struct {
 
 // Configuration defines the interface for operating on image configurations.
 type Configuration interface {
-	// GetProvisionUpstreamConfig returns the containerd upstream configuration for node provision based on provider and region.
-	GetProvisionUpstreamConfig(provider string, region string) []UpStreamConfiguration
-	// GetReconcileUpstreamConfig returns the containerd upstream configuration for node reconciliation based on provider and region.
-	GetReconcileUpstreamConfig(provider string, region string) []UpStreamConfiguration
+	// GetUpstreamConfig returns the containerd upstream configuration based on provider and region.
+	GetUpstreamConfig(provider string, region string) []UpStreamConfiguration
 }
 
 type configuration struct {
-	provision []upstreamConfig
-	reconcile []upstreamConfig
+	upstreamConfigs []upstreamConfig
 }
 
 type upstreamConfig struct {
@@ -38,35 +35,16 @@ type hostConfig struct {
 	regionToURL map[string]string
 }
 
-// GetProvisionUpstreamConfig returns the containerd upstream configuration for node provision based on provider and region.
-func (c *configuration) GetProvisionUpstreamConfig(provider string, region string) []UpStreamConfiguration {
-	result := make([]UpStreamConfiguration, 0, len(c.provision))
+// GetUpstreamConfig returns the containerd upstream configuration based on provider and region.
+func (c *configuration) GetUpstreamConfig(provider string, region string) []UpStreamConfiguration {
+	result := make([]UpStreamConfiguration, 0, len(c.upstreamConfigs))
 
-	for _, provision := range c.provision {
-		if hosts, providerExists := provision.providerToHosts[provider]; providerExists {
+	for _, upstreamConf := range c.upstreamConfigs {
+		if hosts, providerExists := upstreamConf.providerToHosts[provider]; providerExists {
 			if hostURL, regionExists := hosts.regionToURL[region]; regionExists {
 				result = append(result, UpStreamConfiguration{
-					Upstream: provision.upstream,
-					Server:   provision.server,
-					HostURL:  hostURL,
-				})
-			}
-		}
-	}
-
-	return result
-}
-
-// GetReconcileUpstreamConfig returns the containerd upstream configuration for node reconciliation based on provider and region.
-func (c *configuration) GetReconcileUpstreamConfig(provider string, region string) []UpStreamConfiguration {
-	result := make([]UpStreamConfiguration, 0, len(c.reconcile))
-
-	for _, provision := range c.reconcile {
-		if hosts, providerExists := provision.providerToHosts[provider]; providerExists {
-			if hostURL, regionExists := hosts.regionToURL[region]; regionExists {
-				result = append(result, UpStreamConfiguration{
-					Upstream: provision.upstream,
-					Server:   provision.server,
+					Upstream: upstreamConf.upstream,
+					Server:   upstreamConf.server,
 					HostURL:  hostURL,
 				})
 			}
@@ -78,27 +56,18 @@ func (c *configuration) GetReconcileUpstreamConfig(provider string, region strin
 
 // NewConfiguration creates a new containerd configuration from the given configuration.
 func NewConfiguration(config *v1alpha1.Configuration) Configuration {
-	if config.Containerd == nil {
-		return &configuration{}
-	}
-
 	conf := &configuration{
-		provision: make([]upstreamConfig, 0, len(config.Containerd.Provision)),
-		reconcile: make([]upstreamConfig, 0, len(config.Containerd.Provision)),
+		upstreamConfigs: make([]upstreamConfig, 0, len(config.Containerd)),
 	}
 
-	for _, provision := range config.Containerd.Provision {
-		conf.provision = append(conf.provision, createUpstreamConfig(provision))
-	}
-
-	for _, reconcile := range config.Containerd.Reconcile {
-		conf.reconcile = append(conf.reconcile, createUpstreamConfig(reconcile))
+	for _, containerdConfig := range config.Containerd {
+		conf.upstreamConfigs = append(conf.upstreamConfigs, createUpstreamConfig(containerdConfig))
 	}
 
 	return conf
 }
 
-func createUpstreamConfig(containerdUpstreamConfig v1alpha1.ContainerdUpstreamConfig) upstreamConfig {
+func createUpstreamConfig(containerdUpstreamConfig v1alpha1.ContainerdConfiguration) upstreamConfig {
 	upstream := upstreamConfig{
 		upstream: containerdUpstreamConfig.Upstream,
 		server:   containerdUpstreamConfig.Server,

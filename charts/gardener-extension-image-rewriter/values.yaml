@@ -49,10 +49,9 @@ gardener:
 #    prefix: "eu.aws.amazon.com/gardener-project/gardener/"
 
 #containerd:
-#  provision:
-#    upstream: "k8s.io"
-#    server: "https://k8s.io"
-#    hosts:
-#    - host: "north.registry.gardener.cloud/gardener-project"
-#      provider: "local"
-#      regions: ["north"]
+#- upstream: "k8s.io"
+#  server: "https://k8s.io"
+#  hosts:
+#  - host: "north.registry.gardener.cloud/gardener-project"
+#    provider: "local"
+#    regions: ["north"]

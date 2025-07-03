@@ -50,7 +50,7 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 
 	switch osc.Spec.Purpose {
 	case extensionsv1alpha1.OperatingSystemConfigPurposeReconcile:
-		for _, upstreamConfig := range m.config.GetReconcileUpstreamConfig(shootProvider, shootRegion) {
+		for _, upstreamConfig := range m.config.GetUpstreamConfig(shootProvider, shootRegion) {
 			if osc.Spec.CRIConfig.Containerd == nil {
 				osc.Spec.CRIConfig.Containerd = &extensionsv1alpha1.ContainerdConfig{}
 			}
@@ -60,6 +60,8 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 				continue
 			}
 
+			log.V(2).Info("Adding registry mirror configuration for node reconciliation", "upstream", upstreamConfig.Upstream)
+
 			osc.Spec.CRIConfig.Containerd.Registries = append(osc.Spec.CRIConfig.Containerd.Registries, extensionsv1alpha1.RegistryConfig{
 				Upstream: upstreamConfig.Upstream,
 				Server:   ptr.To(upstreamConfig.Server),
@@ -68,13 +70,13 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 		}
 
 	case extensionsv1alpha1.OperatingSystemConfigPurposeProvision:
-		for _, upstreamConfig := range m.config.GetProvisionUpstreamConfig(shootProvider, shootRegion) {
+		for _, upstreamConfig := range m.config.GetUpstreamConfig(shootProvider, shootRegion) {
 			mirror := containerd.RegistryMirror{
 				UpstreamServer: upstreamConfig.Server,
 				MirrorHost:     upstreamConfig.HostURL,
 			}
 
-			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream, "mirror", mirror)
+			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream)
 
 			osc.Spec.Files = extensionswebhook.EnsureFileWithPath(osc.Spec.Files, extensionsv1alpha1.File{
 				Path:        filepath.Join("/etc/containerd/certs.d", upstreamConfig.Upstream, "hosts.toml"),

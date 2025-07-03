@@ -16,22 +16,14 @@ type Configuration struct {
 
 	// ContainerdConfiguration contains the containerd configuration for the image rewriter.
 	// +optional
-	Containerd *ContainerdConfiguration `json:"containerd,omitempty"`
+	Containerd []ContainerdConfiguration `json:"containerd,omitempty"`
 	// Overwrites configure the source and target images that should be replaced.
 	// +optional
 	Overwrites []ImageOverwrite `json:"overwrites,omitempty"`
 }
 
-// ContainerdConfiguration containes information about the containerd configuration.
+// ContainerdConfiguration contains information about a containerd upstream configuration.
 type ContainerdConfiguration struct {
-	// Provision contains the upstreams that should be configured for containerd during node bootstrap.
-	Provision []ContainerdUpstreamConfig `json:"bootstrap,omitempty"`
-	// Reconcile are the upstreams that should be configured for containerd.
-	Reconcile []ContainerdUpstreamConfig `json:"reconcile,omitempty"`
-}
-
-// ContainerdUpstreamConfig contains information about a containerd upstream configuration.
-type ContainerdUpstreamConfig struct {
 	// Upstream is the upstream name of the registry.
 	Upstream string `json:"upstream"`
 	// Server is the URL of the upstream registry.

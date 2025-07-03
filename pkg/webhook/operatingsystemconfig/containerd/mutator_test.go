@@ -42,45 +42,23 @@ var _ = Describe("Mutator", func() {
 		fakeClient = fakeclient.NewClientBuilder().WithScheme(scheme).Build()
 
 		config = &v1alpha1.Configuration{
-			Containerd: &v1alpha1.ContainerdConfiguration{
-				Provision: []v1alpha1.ContainerdUpstreamConfig{
-					{
-						Upstream: "upstream1",
-						Server:   "https://server1",
-						Hosts: []v1alpha1.ContainerdHostConfig{
-							{URL: "https://mirror1-west", Provider: "local", Regions: []string{"west"}},
-							{URL: "https://mirror1-central", Provider: "local", Regions: []string{"central", "south", "north"}},
-							{URL: "https://mirror1-east", Provider: "local", Regions: []string{"east"}},
-						},
-					},
-					{
-						Upstream: "upstream2",
-						Server:   "https://server2",
-						Hosts: []v1alpha1.ContainerdHostConfig{
-							{URL: "https://mirror2-west", Provider: "local2", Regions: []string{"west"}},
-							{URL: "https://mirror2-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
-							{URL: "https://mirror2-east", Provider: "local2", Regions: []string{"east"}},
-						},
+			Containerd: []v1alpha1.ContainerdConfiguration{
+				{
+					Upstream: "upstream1",
+					Server:   "https://server1",
+					Hosts: []v1alpha1.ContainerdHostConfig{
+						{URL: "https://mirror1-west", Provider: "local", Regions: []string{"west"}},
+						{URL: "https://mirror1-central", Provider: "local", Regions: []string{"central", "south", "north"}},
+						{URL: "https://mirror1-east", Provider: "local", Regions: []string{"east"}},
 					},
 				},
-				Reconcile: []v1alpha1.ContainerdUpstreamConfig{
-					{
-						Upstream: "upstream3",
-						Server:   "https://server3",
-						Hosts: []v1alpha1.ContainerdHostConfig{
-							{URL: "https://mirror3-west", Provider: "local2", Regions: []string{"west"}},
-							{URL: "https://mirror3-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
-							{URL: "https://mirror3-east", Provider: "local2", Regions: []string{"east"}},
-						},
-					},
-					{
-						Upstream: "upstream4",
-						Server:   "https://server4",
-						Hosts: []v1alpha1.ContainerdHostConfig{
-							{URL: "https://mirror4-west", Provider: "local", Regions: []string{"west"}},
-							{URL: "https://mirror4-central", Provider: "local", Regions: []string{"central", "south", "north"}},
-							{URL: "https://mirror4-east", Provider: "local", Regions: []string{"east"}},
-						},
+				{
+					Upstream: "upstream2",
+					Server:   "https://server2",
+					Hosts: []v1alpha1.ContainerdHostConfig{
+						{URL: "https://mirror2-west", Provider: "local2", Regions: []string{"west"}},
+						{URL: "https://mirror2-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
+						{URL: "https://mirror2-east", Provider: "local2", Regions: []string{"east"}},
 					},
 				},
 			},
@@ -186,10 +164,10 @@ var _ = Describe("Mutator", func() {
 				Expect(mutator.Mutate(ctx, osc, nil)).To(Succeed())
 
 				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(extensionsv1alpha1.RegistryConfig{
-					Upstream: "upstream4",
-					Server:   ptr.To("https://server4"),
+					Upstream: "upstream1",
+					Server:   ptr.To("https://server1"),
 					Hosts: []extensionsv1alpha1.RegistryHost{
-						{URL: "https://mirror4-central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
+						{URL: "https://mirror1-central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
 					},
 				}))
 			})
@@ -198,7 +176,7 @@ var _ = Describe("Mutator", func() {
 				osc.Spec.CRIConfig.Containerd = &extensionsv1alpha1.ContainerdConfig{
 					Registries: []extensionsv1alpha1.RegistryConfig{
 						{
-							Upstream: "upstream4",
+							Upstream: "upstream1",
 							Server:   ptr.To("https://server4"),
 							Hosts: []extensionsv1alpha1.RegistryHost{
 								{URL: "https://custom-mirror4", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
@@ -210,7 +188,7 @@ var _ = Describe("Mutator", func() {
 				Expect(mutator.Mutate(ctx, osc, nil)).To(Succeed())
 
 				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(extensionsv1alpha1.RegistryConfig{
-					Upstream: "upstream4",
+					Upstream: "upstream1",
 					Server:   ptr.To("https://server4"),
 					Hosts: []extensionsv1alpha1.RegistryHost{
 						{URL: "https://custom-mirror4", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
