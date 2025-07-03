@@ -23,7 +23,7 @@ import (
 
 type mutator struct {
 	client client.Client
-	config *v1alpha1.Configuration
+	config containerd.Configuration
 }
 
 func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
@@ -50,12 +50,7 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 
 	switch osc.Spec.Purpose {
 	case extensionsv1alpha1.OperatingSystemConfigPurposeReconcile:
-		for _, upstreamConfig := range m.config.Containerd.Reconcile {
-			hostURL, found := findHostURL(upstreamConfig.Hosts, shootProvider, shootRegion)
-			if !found {
-				continue
-			}
-
+		for _, upstreamConfig := range m.config.GetReconcileUpstreamConfig(shootProvider, shootRegion) {
 			if osc.Spec.CRIConfig.Containerd == nil {
 				osc.Spec.CRIConfig.Containerd = &extensionsv1alpha1.ContainerdConfig{}
 			}
@@ -68,26 +63,21 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 			osc.Spec.CRIConfig.Containerd.Registries = append(osc.Spec.CRIConfig.Containerd.Registries, extensionsv1alpha1.RegistryConfig{
 				Upstream: upstreamConfig.Upstream,
 				Server:   ptr.To(upstreamConfig.Server),
-				Hosts:    []extensionsv1alpha1.RegistryHost{{URL: hostURL, Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}}},
+				Hosts:    []extensionsv1alpha1.RegistryHost{{URL: upstreamConfig.HostURL, Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}}},
 			})
 		}
 
 	case extensionsv1alpha1.OperatingSystemConfigPurposeProvision:
-		for _, provision := range m.config.Containerd.Provision {
-			hostURL, found := findHostURL(provision.Hosts, shootProvider, shootRegion)
-			if !found {
-				continue
-			}
-
+		for _, upstreamConfig := range m.config.GetProvisionUpstreamConfig(shootProvider, shootRegion) {
 			mirror := containerd.RegistryMirror{
-				UpstreamServer: provision.Upstream,
-				MirrorHost:     hostURL,
+				UpstreamServer: upstreamConfig.Server,
+				MirrorHost:     upstreamConfig.HostURL,
 			}
 
-			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", provision.Upstream, "mirror", mirror)
+			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream, "mirror", mirror)
 
 			osc.Spec.Files = extensionswebhook.EnsureFileWithPath(osc.Spec.Files, extensionsv1alpha1.File{
-				Path:        filepath.Join("/etc/containerd/certs.d", provision.Upstream, "hosts.toml"),
+				Path:        filepath.Join("/etc/containerd/certs.d", upstreamConfig.Upstream, "hosts.toml"),
 				Permissions: ptr.To[uint32](0644),
 				Content: extensionsv1alpha1.FileContent{
 					Inline: &extensionsv1alpha1.FileContentInline{
@@ -99,21 +89,6 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 	}
 
 	return nil
-}
-
-func findHostURL(hosts []v1alpha1.ContainerdHostConfig, provider, region string) (string, bool) {
-	for _, host := range hosts {
-		if host.Provider != provider {
-			continue
-		}
-		for _, hostRegion := range host.Regions {
-			if hostRegion != region {
-				continue
-			}
-			return host.URL, true
-		}
-	}
-	return "", false
 }
 
 func hasUpstreamConfiguration(containerdConfig *extensionsv1alpha1.ContainerdConfig, upstream string) bool {
@@ -130,6 +105,6 @@ func hasUpstreamConfiguration(containerdConfig *extensionsv1alpha1.ContainerdCon
 func NewMutator(client client.Client, config *v1alpha1.Configuration) extensionswebhook.Mutator {
 	return &mutator{
 		client: client,
-		config: config,
+		config: containerd.NewConfiguration(config),
 	}
 }
