@@ -55,7 +55,7 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 				osc.Spec.CRIConfig.Containerd = &extensionsv1alpha1.ContainerdConfig{}
 			}
 
-			// Don't overwrite existing upstream configuration to not collide with other extensions (e.g. registry cache)
+			// Don't overwrite existing upstream configuration to not collide with other extensions (e.g. registry-cache)
 			if hasUpstreamConfiguration(osc.Spec.CRIConfig.Containerd, upstreamConfig.Upstream) {
 				continue
 			}

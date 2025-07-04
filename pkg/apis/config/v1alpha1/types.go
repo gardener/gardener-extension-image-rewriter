@@ -29,7 +29,7 @@ type ContainerdConfiguration struct {
 	// Server is the URL of the upstream registry.
 	Server string `json:"server"`
 	// Hosts are the containerd hosts separated by provider and regions.
-	Hosts []ContainerdHostConfig `json:"hosts,omitempty"`
+	Hosts []ContainerdHostConfig `json:"hosts"`
 }
 
 // ContainerdHostConfig contains information about a containerd host configuration.
