@@ -7,6 +7,8 @@ apiVersion: config.image-rewriter.extensions.gardener.cloud/v1alpha1
 kind: Configuration
 overwrites:
 {{ toYaml .Values.overwrites | indent 2 }}
+containerd:
+{{ toYaml .Values.containerd | indent 2 }}
 {{- end -}}
 
 {{- define "configmap" -}}
@@ -16,7 +18,7 @@ overwrites:
 extension-image-rewriter-leader-election
 {{- end -}}
 
-{{-  define "image" -}}
+{{- define "image" -}}
   {{- if .Values.image.ref -}}
   {{ .Values.image.ref }}
   {{- else -}}
@@ -27,3 +29,21 @@ extension-image-rewriter-leader-election
   {{- end }}
   {{- end -}}
 {{- end }}
+
+{{- define "disabledcontrollers" }}
+{{- if not .Values.overwrites -}}
+image-rewriter-cluster-controller
+{{- end }}
+{{- end }}
+
+{{- define "disabledwebhooks" }}
+{{- $disabledWebhooks := list }}
+{{- if not .Values.overwrites }}
+{{- $disabledWebhooks = append $disabledWebhooks "pod-image-rewriter" }}
+{{- $disabledWebhooks = append $disabledWebhooks "osc-image-rewriter" }}
+{{- end }}
+{{- if not .Values.containerd }}
+{{- $disabledWebhooks = append $disabledWebhooks "osc-containerd" }}
+{{- end }}
+{{- join "," $disabledWebhooks -}}
+{{- end -}}

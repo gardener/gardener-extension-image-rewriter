@@ -14,7 +14,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
-	"github.com/gardener/gardener-extension-image-rewriter/pkg/image"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/utils/image"
 )
 
 type mutator struct {

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package image_test
+package containerd_test
 
 import (
 	"testing"
@@ -13,5 +13,5 @@ import (
 
 func TestImage(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Image Suite")
+	RunSpecs(t, "Utils Containerd Suite")
 }

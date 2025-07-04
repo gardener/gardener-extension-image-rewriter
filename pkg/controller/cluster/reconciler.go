@@ -19,7 +19,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	"github.com/gardener/gardener-extension-image-rewriter/pkg/image"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/utils/image"
 )
 
 type reconciler struct {

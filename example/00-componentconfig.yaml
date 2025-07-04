@@ -1,5 +1,24 @@
 kind: Configuration
 apiVersion: config.image-rewriter.extensions.gardener.cloud/v1alpha1
+containerd:
+- upstream: "k8s.io"
+  server: "https://k8s.io"
+  hosts:
+  - url: "north.registry.gardener.cloud/gardener-project"
+    provider: "local"
+    regions: ["north"]
+- upstream: "europe-docker.pkg.dev"
+  server: "https://europe-docker.pkg.dev"
+  hosts:
+  - url: "south.registry.gardener.cloud/gardener-project"
+    provider: "local"
+    regions: ["south"]
+  - url: "west.registry.gardener.cloud/gardener-project"
+    provider: "local"
+    regions: ["west"]
+  - url: "east.registry.gardener.cloud/gardener-project"
+    provider: "local"
+    regions: ["east"]
 overwrites:
 - source:
     prefix: "europe-docker.pkg.dev/gardener-project"

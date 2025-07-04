@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package operatingsystemconfig
+package containerd
 
 import (
 	extensionswebhook "github.com/gardener/gardener/extensions/pkg/webhook"
@@ -19,7 +19,7 @@ import (
 
 const (
 	// Name is the name of the webhook.
-	Name = "osc-image-rewriter"
+	Name = "osc-containerd"
 )
 
 var (
@@ -34,7 +34,7 @@ type AddOptions struct {
 
 // AddToManager creates a webhook and adds it to the manager.
 func AddToManager(mgr manager.Manager) (*extensionswebhook.Webhook, error) {
-	logger := log.Log.WithValues("webhook", Name)
+	logger := log.Log.WithName(Name)
 	logger.Info("Adding webhook to manager")
 
 	// Create handler
@@ -47,15 +47,18 @@ func AddToManager(mgr manager.Manager) (*extensionswebhook.Webhook, error) {
 		return nil, err
 	}
 
+	// Create webhook
+	logger.Info("Creating webhook")
+
 	return &extensionswebhook.Webhook{
 		Name:    Name,
 		Types:   types,
-		Target:  extensionswebhook.TargetSeed,
 		Path:    Name,
+		Target:  extensionswebhook.TargetSeed,
 		Webhook: &admission.Webhook{Handler: handler, RecoverPanic: ptr.To(true)},
 		NamespaceSelector: &metav1.LabelSelector{
-			MatchLabels: map[string]string{
-				v1beta1constants.GardenRole: v1beta1constants.GardenRoleShoot,
+			MatchExpressions: []metav1.LabelSelectorRequirement{
+				{Key: v1beta1constants.GardenRole, Operator: metav1.LabelSelectorOpIn, Values: []string{v1beta1constants.GardenRoleShoot}},
 			},
 		},
 	}, nil

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package operatingsystemconfig_test
+package image_test
 
 import (
 	"context"
@@ -19,7 +19,7 @@ import (
 	fakeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
-	. "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig"
+	. "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/image"
 )
 
 var _ = Describe("Mutator", func() {
@@ -133,7 +133,7 @@ var _ = Describe("Mutator", func() {
 	})
 
 	Describe("#Mutate", func() {
-		Context("Provisioning OperatingSystemConfig", func() {
+		Context("Provision OperatingSystemConfig", func() {
 			BeforeEach(func() {
 				osc.Spec.Purpose = extensionsv1alpha1.OperatingSystemConfigPurposeProvision
 			})
@@ -168,7 +168,7 @@ var _ = Describe("Mutator", func() {
 			})
 		})
 
-		Context("Reconciling OperatingSystemConfig", func() {
+		Context("Reconcile OperatingSystemConfig", func() {
 			BeforeEach(func() {
 				osc.Spec.Purpose = extensionsv1alpha1.OperatingSystemConfigPurposeReconcile
 			})
