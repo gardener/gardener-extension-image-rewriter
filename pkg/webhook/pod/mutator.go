@@ -30,6 +30,10 @@ func NewMutator(config image.Configuration) extensionswebhook.Mutator {
 	}
 }
 
+func (m *mutator) WantsClusterObject() bool {
+	return true
+}
+
 // Mutate mutates the given Pod object by replacing the images of its containers if a replacement is defined.
 func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 	log := logf.FromContext(ctx)
@@ -65,8 +69,4 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 	}
 
 	return nil
-}
-
-func (m *mutator) WantsClusterObject() bool {
-	return true
 }
