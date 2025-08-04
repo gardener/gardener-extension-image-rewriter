@@ -5,10 +5,14 @@ gardener-extension-image-rewriter
 {{- define "config" -}}
 apiVersion: config.image-rewriter.extensions.gardener.cloud/v1alpha1
 kind: Configuration
+{{- if .Values.overwrites }}
 overwrites:
 {{ toYaml .Values.overwrites | indent 2 }}
+{{- end }}
+{{- if .Values.containerd }}
 containerd:
 {{ toYaml .Values.containerd | indent 2 }}
+{{- end }}
 {{- end -}}
 
 {{- define "configmap" -}}
