@@ -1,0 +1,16 @@
+version = 1
+SPDX-PackageName = "Gardener gardener-extension-image-rewriter"
+SPDX-PackageSupplier = "The Gardener project <gardener@googlegroups.com>"
+SPDX-PackageDownloadLocation = "https://github.com/gardener/gardener-extension-image-rewriter"
+
+[[annotations]]
+path = [".dockerignore", ".github", ".gitignore", ".golangci.yaml", "OWNERS", "OWNERS_ALIASES", "VERSION", "charts", "example", "go.mod", "go.sum", "hack/api-reference/**.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and Gardener contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["docs/**", "**.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 SAP SE or an SAP affiliate company and Gardener contributors"
+SPDX-License-Identifier = "CC-BY-4.0"
