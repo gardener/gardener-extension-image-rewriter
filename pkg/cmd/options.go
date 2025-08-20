@@ -16,10 +16,9 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
-	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
-
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/validation"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/controller"
 	containerdwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/containerd"
 	imagewebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/image"
 	podwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/pod"
@@ -93,7 +92,7 @@ func (c *ExtensionConfig) Apply(config *v1alpha1.Configuration) {
 func ControllerSwitches() *cmd.SwitchOptions {
 	return cmd.NewSwitchOptions(
 		cmd.Switch(extensionsheartbeatcontroller.ControllerName, extensionsheartbeatcontroller.AddToManager),
-		cmd.Switch(clustercontroller.ControllerName, clustercontroller.AddToManager),
+		cmd.Switch(controller.ControllerName, controller.AddToManager),
 	)
 }
 

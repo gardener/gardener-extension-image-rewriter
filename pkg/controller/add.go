@@ -8,22 +8,21 @@ import (
 	"context"
 	"sync/atomic"
 
-	extensionsv1alpha1 "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"
-	corev1 "k8s.io/api/core/v1"
-	"sigs.k8s.io/controller-runtime/pkg/client"
+	"github.com/gardener/gardener/extensions/pkg/controller/extension"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
-	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/utils/image"
 )
 
 const (
+	// Type is the type of Extension resource.
+	Type = "image-rewriter"
 	// ControllerName is the name of the image rewriter controller.
-	ControllerName = "image-rewriter-cluster-controller"
+	ControllerName = "image-rewriter-controller"
+	// FinalizerSuffix is the finalizer suffix for the image rewriter controller.
+	FinalizerSuffix = "image-rewriter"
 )
 
 var (
@@ -41,26 +40,15 @@ type AddOptions struct {
 	ShootWebhookConfig *atomic.Value
 }
 
-// AddToManager adds a controller with the default Options to the given Controller Manager.
+// AddToManager adds the extension controller with the default Options to the given Controller Manager.
 func AddToManager(ctx context.Context, mgr manager.Manager) error {
-	DefaultAddOptions.Controller.Reconciler = &reconciler{
-		client:             mgr.GetClient(),
-		config:             image.NewImageConfiguration(&DefaultAddOptions.Config),
-		shootWebhookConfig: DefaultAddOptions.ShootWebhookConfig,
-	}
-
-	ctrl, err := controller.New(ControllerName, mgr, DefaultAddOptions.Controller)
-	if err != nil {
-		return err
-	}
-
-	return ctrl.Watch(
-		source.Kind[client.Object](mgr.GetCache(),
-			&extensionsv1alpha1.Cluster{},
-			&handler.EnqueueRequestForObject{},
-			predicate.NewPredicateFuncs(func(object client.Object) bool {
-				return mgr.GetClient().Get(ctx, client.ObjectKey{Name: object.GetName()}, &corev1.Namespace{}) == nil
-			}),
-		),
-	)
+	return extension.Add(mgr, extension.AddArgs{
+		Actuator:          NewActuator(mgr.GetClient(), DefaultAddOptions.ShootWebhookConfig, image.NewImageConfiguration(&DefaultAddOptions.Config)),
+		ControllerOptions: DefaultAddOptions.Controller,
+		Name:              ControllerName,
+		FinalizerSuffix:   FinalizerSuffix,
+		Resync:            0,
+		Predicates:        extension.DefaultPredicates(ctx, mgr, false),
+		Type:              Type,
+	})
 }
