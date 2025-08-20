@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -16,9 +16,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
+	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
+
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/validation"
-	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
 	containerdwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/containerd"
 	imagewebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/image"
 	podwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/pod"
