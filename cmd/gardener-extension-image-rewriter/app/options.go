@@ -12,7 +12,7 @@ import (
 	webhookcmd "github.com/gardener/gardener/extensions/pkg/webhook/cmd"
 
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/cmd"
-	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/controller"
 )
 
 // ExtensionName is the name of the extension.
@@ -41,7 +41,7 @@ func NewOptions() *Options {
 	webhookSwitches := cmd.WebhookSwitchOptions()
 	webhookOptions := webhookcmd.NewAddToManagerOptions(
 		"image-rewriter",
-		clustercontroller.ShootWebhooksResourceName,
+		controller.ShootWebhooksResourceName,
 		nil,
 		webhookServerOptions,
 		webhookSwitches,

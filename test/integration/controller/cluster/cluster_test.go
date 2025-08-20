@@ -21,7 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
-	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/controller"
 )
 
 var _ = Describe("Cluster controller test", func() {
@@ -60,7 +60,7 @@ var _ = Describe("Cluster controller test", func() {
 
 	Describe("Create the webhook configuration", Ordered, func() {
 		It("should add the configuration and controller to the manager", func() {
-			clustercontroller.DefaultAddOptions.Config = v1alpha1.Configuration{
+			controller.DefaultAddOptions.Config = v1alpha1.Configuration{
 				Overwrites: []v1alpha1.ImageOverwrite{
 					{
 						Source: v1alpha1.Image{Prefix: ptr.To("gardener.cloud/gardener-project")},
@@ -75,8 +75,8 @@ var _ = Describe("Cluster controller test", func() {
 				},
 			}
 
-			clustercontroller.DefaultAddOptions.ShootWebhookConfig = &atomic.Value{}
-			clustercontroller.DefaultAddOptions.ShootWebhookConfig.Store(&webhook.Configs{
+			controller.DefaultAddOptions.ShootWebhookConfig = &atomic.Value{}
+			controller.DefaultAddOptions.ShootWebhookConfig.Store(&webhook.Configs{
 				MutatingWebhookConfig: &admissionregistrationv1.MutatingWebhookConfiguration{
 					ObjectMeta: metav1.ObjectMeta{
 						Name: "extension-image-rewriter-shoot-webhooks",
@@ -84,7 +84,7 @@ var _ = Describe("Cluster controller test", func() {
 				},
 			})
 
-			Expect(clustercontroller.AddToManager(ctx, mgr)).To(Succeed())
+			Expect(controller.AddToManager(ctx, mgr)).To(Succeed())
 		})
 
 		It("should do nothing because no overwrite configuration is found", func() {
