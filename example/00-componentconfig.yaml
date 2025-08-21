@@ -4,19 +4,19 @@ containerd:
 - upstream: "k8s.io"
   server: "https://k8s.io"
   hosts:
-  - url: "north.registry.gardener.cloud/gardener-project"
+  - url: "https://mirror.registry.gardener.cloud"
     provider: "local"
     regions: ["north"]
 - upstream: "europe-docker.pkg.dev"
   server: "https://europe-docker.pkg.dev"
   hosts:
-  - url: "south.registry.gardener.cloud/gardener-project"
+  - url: "https://south.registry.gardener.cloud"
     provider: "local"
     regions: ["south"]
-  - url: "west.registry.gardener.cloud/gardener-project"
+  - url: "https://west.registry.gardener.cloud"
     provider: "local"
     regions: ["west"]
-  - url: "east.registry.gardener.cloud/gardener-project"
+  - url: "https://east.registry.gardener.cloud"
     provider: "local"
     regions: ["east"]
 overwrites:

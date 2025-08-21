@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package cluster_test
+package controller_test
 
 import (
 	"context"
@@ -28,12 +28,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
 
-func TestCluster(t *testing.T) {
+func TestController(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Test Integration Controller Cluster Suite")
+	RunSpecs(t, "Test Integration Controller Suite")
 }
 
-const testID = "clustercontroller-test"
+const testID = "controller-test"
 
 var (
 	ctx       = context.Background()
@@ -58,8 +58,9 @@ var _ = BeforeSuite(func() {
 	testEnv = &envtest.Environment{
 		CRDInstallOptions: envtest.CRDInstallOptions{
 			Paths: []string{
-				filepath.Join("..", "..", "..", "..", "example", "20-crd-extensions.gardener.cloud_clusters.yaml"),
-				filepath.Join("..", "..", "..", "..", "example", "20-crd-resources.gardener.cloud_managedresources.yaml"),
+				filepath.Join("..", "..", "..", "example", "20-crd-extensions.gardener.cloud_clusters.yaml"),
+				filepath.Join("..", "..", "..", "example", "20-crd-extensions.gardener.cloud_extensions.yaml"),
+				filepath.Join("..", "..", "..", "example", "20-crd-resources.gardener.cloud_managedresources.yaml"),
 			},
 		},
 		ErrorIfCRDPathMissing: true,

@@ -34,12 +34,6 @@ extension-image-rewriter-leader-election
   {{- end -}}
 {{- end }}
 
-{{- define "disabledcontrollers" }}
-{{- if not .Values.overwrites -}}
-image-rewriter-cluster-controller
-{{- end }}
-{{- end }}
-
 {{- define "disabledwebhooks" }}
 {{- $disabledWebhooks := list }}
 {{- if not .Values.overwrites }}

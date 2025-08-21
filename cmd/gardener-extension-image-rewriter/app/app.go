@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gardener/gardener/extensions/pkg/controller"
+	extensionscontroller "github.com/gardener/gardener/extensions/pkg/controller"
 	heartbeatcontroller "github.com/gardener/gardener/extensions/pkg/controller/heartbeat"
 	"github.com/gardener/gardener/extensions/pkg/util"
 	gardenerhealthz "github.com/gardener/gardener/pkg/healthz"
@@ -22,7 +22,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
-	clustercontroller "github.com/gardener/gardener-extension-image-rewriter/pkg/controller/cluster"
+	"github.com/gardener/gardener-extension-image-rewriter/pkg/controller"
 	containerdwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/containerd"
 	imagewebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/operatingsystemconfig/image"
 	podwebhook "github.com/gardener/gardener-extension-image-rewriter/pkg/webhook/pod"
@@ -84,13 +84,13 @@ func (o *Options) run(ctx context.Context) error {
 	}
 
 	scheme := mgr.GetScheme()
-	if err := controller.AddToScheme(scheme); err != nil {
+	if err := extensionscontroller.AddToScheme(scheme); err != nil {
 		return fmt.Errorf("could not update manager scheme: %w", err)
 	}
 
 	o.heartbeatOptions.Completed().Apply(&heartbeatcontroller.DefaultAddOptions)
-	o.controllerOptions.Completed().Apply(&clustercontroller.DefaultAddOptions.Controller)
-	o.extensionOptions.Completed().Apply(&clustercontroller.DefaultAddOptions.Config)
+	o.controllerOptions.Completed().Apply(&controller.DefaultAddOptions.Controller)
+	o.extensionOptions.Completed().Apply(&controller.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&podwebhook.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&imagewebhook.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&containerdwebhook.DefaultAddOptions.Config)
@@ -98,7 +98,7 @@ func (o *Options) run(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("could not add the mutating webhook to manager: %w", err)
 	}
-	clustercontroller.DefaultAddOptions.ShootWebhookConfig = shootWebhookConfig
+	controller.DefaultAddOptions.ShootWebhookConfig = shootWebhookConfig
 
 	if err := o.controllerSwitches.Completed().AddToManager(ctx, mgr); err != nil {
 		return fmt.Errorf("could not add controllers to manager: %w", err)
