@@ -41,17 +41,17 @@ gardener:
   version: ""
 
 #overwrites:
-#- provider: aws
-#  source:
+#- source:
 #    prefix: "eu.gcr.io/gardener-project/gardener/"
 #  targets:
-#  - region: eu-central-1
-#    prefix: "eu.aws.amazon.com/gardener-project/gardener/"
+#  - prefix: "eu.aws.amazon.com/gardener-project/gardener/"
+#    provider: "local"
+#    regions: ["north]
 
 #containerd:
 #- upstream: "k8s.io"
 #  server: "https://k8s.io"
 #  hosts:
-#  - host: "north.registry.gardener.cloud/gardener-project"
+#  - url: "https://mirror.registry.gardener.cloud"
 #    provider: "local"
 #    regions: ["north"]
