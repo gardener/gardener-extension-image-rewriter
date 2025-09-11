@@ -1,5 +1,7 @@
 # Gardener Extension for Image Rewrites
 
+[![REUSE status](https://api.reuse.software/badge/github.com/gardener/gardener-extension-image-rewriter)](https://api.reuse.software/info/github.com/gardener/gardener-extension-image-rewriter)
+
 This project provides a Gardener extension that replaces pod image references for **system components** of shoot clusters.
 Additionally, it can handle mirror configuration for containerd.
 
