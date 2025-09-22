@@ -10,13 +10,13 @@ containerd:
 - upstream: "europe-docker.pkg.dev"
   server: "https://europe-docker.pkg.dev"
   hosts:
-  - url: "https://south.registry.gardener.cloud"
+  - url: "https://registry.gardener.cloud/v2/south"
     provider: "local"
     regions: ["south"]
-  - url: "https://west.registry.gardener.cloud"
+  - url: "https://registry.gardener.cloud/v2/west"
     provider: "local"
     regions: ["west"]
-  - url: "https://east.registry.gardener.cloud"
+  - url: "https://registry.gardener.cloud/v2/east"
     provider: "local"
     regions: ["east"]
 overwrites:
