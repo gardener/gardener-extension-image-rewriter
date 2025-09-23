@@ -78,12 +78,17 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 
 			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream)
 
+			data, err := mirror.HostsTOML()
+			if err != nil {
+				return fmt.Errorf("failed to create hosts.toml file for upstream %q: %w", upstreamConfig.Upstream, err)
+			}
+
 			osc.Spec.Files = extensionswebhook.EnsureFileWithPath(osc.Spec.Files, extensionsv1alpha1.File{
 				Path:        filepath.Join("/etc/containerd/certs.d", upstreamConfig.Upstream, "hosts.toml"),
 				Permissions: ptr.To[uint32](0644),
 				Content: extensionsv1alpha1.FileContent{
 					Inline: &extensionsv1alpha1.FileContentInline{
-						Data: mirror.HostsTOML(),
+						Data: data,
 					},
 				},
 			})

@@ -16,11 +16,11 @@ var _ = Describe("RegistryMirror", func() {
 		It("generates correct configuration for valid fields", func() {
 			mirror := RegistryMirror{
 				UpstreamServer: "https://upstream.example.com",
-				MirrorHost:     "mirror.example.com",
+				MirrorHost:     "https://mirror.example.com",
 			}
 			expected := `server = "https://upstream.example.com"
 
-[host."mirror.example.com"]
+[host."https://mirror.example.com"]
   capabilities = ["pull", "resolve"]
 `
 			Expect(mirror.HostsTOML()).To(Equal(expected))
@@ -32,6 +32,20 @@ var _ = Describe("RegistryMirror", func() {
 
 [host.""]
   capabilities = ["pull", "resolve"]
+`
+			Expect(mirror.HostsTOML()).To(Equal(expected))
+		})
+
+		It("handles hosts with path", func() {
+			mirror := RegistryMirror{
+				UpstreamServer: "https://upstream.example.com",
+				MirrorHost:     "https://mirror.example.com/v2/some/path",
+			}
+			expected := `server = "https://upstream.example.com"
+
+[host."https://mirror.example.com/v2/some/path"]
+  capabilities = ["pull", "resolve"]
+  override_path = true
 `
 			Expect(mirror.HostsTOML()).To(Equal(expected))
 		})
