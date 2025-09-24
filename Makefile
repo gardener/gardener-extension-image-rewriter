@@ -51,7 +51,6 @@ docker-image:
 .PHONY: tidy
 tidy:
 	@go mod tidy
-	@mkdir -p $(REPO_ROOT)/.ci/hack && cp $(GARDENER_HACK_DIR)/.ci/* $(REPO_ROOT)/.ci/hack/ && chmod +xw $(REPO_ROOT)/.ci/hack/*
 
 .PHONY: clean
 clean:

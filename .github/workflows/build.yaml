@@ -1,0 +1,68 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string
+        default: snapshot
+        description: |
+          the mode to use. either `snapshot` or `release`. Will affect effective version, as well
+          as target-oci-registry.
+
+jobs:
+  prepare:
+    uses: gardener/cc-utils/.github/workflows/prepare.yaml@master
+    permissions:
+      contents: read
+    with:
+      mode: ${{ inputs.mode }}
+
+  oci-images:
+    name: Build OCI-Images
+    uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
+    needs:
+      - prepare
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      name: gardener-extension-image-rewriter
+      version: ${{ needs.prepare.outputs.version }}
+      oci-registry: ${{ needs.prepare.outputs.oci-registry }}
+      oci-repository: gardener/extensions/image-rewriter
+      oci-platforms: linux/arm64,linux/amd64
+
+  helmcharts:
+    name: Build Helmcharts
+    uses: gardener/cc-utils/.github/workflows/helmchart-ocm.yaml@master
+    needs:
+      - prepare
+      - oci-images
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      name: image-rewriter
+      dir: charts/gardener-extension-image-rewriter
+      oci-registry: ${{ needs.prepare.outputs.oci-registry }}
+      oci-repository: charts/gardener/extensions
+      ocm-mappings: |
+        - ref: ocm-resource:gardener-extension-image-rewriter.repository
+          attribute: image.repository
+        - ref: ocm-resource:gardener-extension-image-rewriter.tag
+          attribute: image.tag
+
+  sast-lint:
+    uses: gardener/cc-utils/.github/workflows/sastlint-ocm.yaml@master
+    permissions:
+      contents: read
+    with:
+      linter: gosec
+      run: make verify-extended
+      go-version: 1.24.4
+      setup-git-identity: true
