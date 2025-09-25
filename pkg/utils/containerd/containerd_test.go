@@ -7,6 +7,7 @@ package containerd_test
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/ptr"
 
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 	. "github.com/gardener/gardener-extension-image-rewriter/pkg/utils/containerd"
@@ -44,9 +45,9 @@ var _ = Describe("Containerd", func() {
 						Upstream: "upstream3",
 						Server:   "https://server3",
 						Hosts: []v1alpha1.ContainerdHostConfig{
-							{URL: "https://mirror3-west", Provider: "local2", Regions: []string{"west"}},
-							{URL: "https://mirror3-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
-							{URL: "https://mirror3-east", Provider: "local2", Regions: []string{"east"}},
+							{URL: "https://mirror3/west", Provider: "local2", Regions: []string{"west"}},
+							{URL: "https://mirror3/central", Provider: "local2", Regions: []string{"central", "south", "north"}},
+							{URL: "https://mirror3/east", Provider: "local2", Regions: []string{"east"}},
 						},
 					},
 				},
@@ -67,6 +68,7 @@ var _ = Describe("Containerd", func() {
 					Expect(result[i].Upstream).To(Equal(expected.Upstream), "upstream should match")
 					Expect(result[i].Server).To(Equal(expected.Server), "server should match")
 					Expect(result[i].HostURL).To(Equal(expected.HostURL), "host URL should match")
+					Expect(result[i].OverridePath).To(Equal(expected.OverridePath), "override path should match")
 				}
 			}
 
@@ -97,7 +99,7 @@ var _ = Describe("Containerd", func() {
 				})
 
 				test("local2", "east", []UpStreamConfiguration{
-					{Upstream: "upstream3", Server: "https://server3", HostURL: "https://mirror3-east"},
+					{Upstream: "upstream3", Server: "https://server3", HostURL: "https://mirror3/east", OverridePath: ptr.To(true)},
 				})
 			})
 
