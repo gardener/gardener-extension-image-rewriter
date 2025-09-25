@@ -5,14 +5,19 @@
 package containerd
 
 import (
+	"regexp"
+
+	"k8s.io/utils/ptr"
+
 	"github.com/gardener/gardener-extension-image-rewriter/pkg/apis/config/v1alpha1"
 )
 
 // UpStreamConfiguration contains the upstream configuration for containerd.
 type UpStreamConfiguration struct {
-	Upstream string
-	Server   string
-	HostURL  string
+	Upstream     string
+	Server       string
+	HostURL      string
+	OverridePath *bool
 }
 
 // Configuration defines the interface for operating on image configurations.
@@ -35,6 +40,8 @@ type hostConfig struct {
 	regionToURL map[string]string
 }
 
+var hostWithPathPattern = regexp.MustCompile(`https?://[a-zA-Z0-9\.\-]+(/[^\s]*)+`)
+
 // GetUpstreamConfig returns the containerd upstream configuration based on provider and region.
 func (c *configuration) GetUpstreamConfig(provider string, region string) []UpStreamConfiguration {
 	result := make([]UpStreamConfiguration, 0, len(c.upstreamConfigs))
@@ -42,10 +49,18 @@ func (c *configuration) GetUpstreamConfig(provider string, region string) []UpSt
 	for _, upstreamConf := range c.upstreamConfigs {
 		if hosts, providerExists := upstreamConf.providerToHosts[provider]; providerExists {
 			if hostURL, regionExists := hosts.regionToURL[region]; regionExists {
+
+				// If the host URL contains a path, override_path needs to be set to true, see https://github.com/containerd/containerd/blob/main/docs/hosts.md#override_path-field.
+				var overridePath *bool
+				if hostWithPathPattern.MatchString(hostURL) {
+					overridePath = ptr.To(true)
+				}
+
 				result = append(result, UpStreamConfiguration{
-					Upstream: upstreamConf.upstream,
-					Server:   upstreamConf.server,
-					HostURL:  hostURL,
+					Upstream:     upstreamConf.upstream,
+					Server:       upstreamConf.server,
+					HostURL:      hostURL,
+					OverridePath: overridePath,
 				})
 			}
 		}

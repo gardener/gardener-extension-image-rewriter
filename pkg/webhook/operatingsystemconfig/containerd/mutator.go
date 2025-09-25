@@ -74,6 +74,7 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 			mirror := containerd.RegistryMirror{
 				UpstreamServer: upstreamConfig.Server,
 				MirrorHost:     upstreamConfig.HostURL,
+				OverridePath:   upstreamConfig.OverridePath,
 			}
 
 			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream)
