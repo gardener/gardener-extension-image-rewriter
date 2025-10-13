@@ -49,7 +49,6 @@ func (c *configuration) GetUpstreamConfig(provider string, region string) []UpSt
 	for _, upstreamConf := range c.upstreamConfigs {
 		if hosts, providerExists := upstreamConf.providerToHosts[provider]; providerExists {
 			if hostURL, regionExists := hosts.regionToURL[region]; regionExists {
-
 				// If the host URL contains a path, override_path needs to be set to true, see https://github.com/containerd/containerd/blob/main/docs/hosts.md#override_path-field.
 				var overridePath *bool
 				if hostWithPathPattern.MatchString(hostURL) {
