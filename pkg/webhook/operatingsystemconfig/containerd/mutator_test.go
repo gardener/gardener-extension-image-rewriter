@@ -56,9 +56,18 @@ var _ = Describe("Mutator", func() {
 					Upstream: "upstream2",
 					Server:   "https://server2",
 					Hosts: []v1alpha1.ContainerdHostConfig{
-						{URL: "https://mirror2-west", Provider: "local2", Regions: []string{"west"}},
-						{URL: "https://mirror2-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
-						{URL: "https://mirror2-east", Provider: "local2", Regions: []string{"east"}},
+						{URL: "https://mirror2/west", Provider: "local", Regions: []string{"west"}},
+						{URL: "https://mirror2/central", Provider: "local", Regions: []string{"central", "south", "north"}},
+						{URL: "https://mirror2/east", Provider: "local", Regions: []string{"east"}},
+					},
+				},
+				{
+					Upstream: "upstream3",
+					Server:   "https://server3",
+					Hosts: []v1alpha1.ContainerdHostConfig{
+						{URL: "https://mirror3-west", Provider: "local2", Regions: []string{"west"}},
+						{URL: "https://mirror3-central", Provider: "local2", Regions: []string{"central", "south", "north"}},
+						{URL: "https://mirror3-east", Provider: "local2", Regions: []string{"east"}},
 					},
 				},
 			},
@@ -112,19 +121,35 @@ var _ = Describe("Mutator", func() {
 			It("should add the containerd configuration as files to the OperatingSystemConfig", func() {
 				Expect(mutator.Mutate(ctx, osc, nil)).To(Succeed())
 
-				Expect(osc.Spec.Files).To(ConsistOf(extensionsv1alpha1.File{
-					Path:        "/etc/containerd/certs.d/upstream1/hosts.toml",
-					Permissions: ptr.To[uint32](0644),
-					Content: extensionsv1alpha1.FileContent{
-						Inline: &extensionsv1alpha1.FileContentInline{
-							Data: `server = "https://server1"
+				Expect(osc.Spec.Files).To(ConsistOf(
+					extensionsv1alpha1.File{
+						Path:        "/etc/containerd/certs.d/upstream1/hosts.toml",
+						Permissions: ptr.To[uint32](0644),
+						Content: extensionsv1alpha1.FileContent{
+							Inline: &extensionsv1alpha1.FileContentInline{
+								Data: `server = "https://server1"
 
 [host."https://mirror1-central"]
   capabilities = ["pull", "resolve"]
 `,
+							},
 						},
 					},
-				}))
+					extensionsv1alpha1.File{
+						Path:        "/etc/containerd/certs.d/upstream2/hosts.toml",
+						Permissions: ptr.To[uint32](0644),
+						Content: extensionsv1alpha1.FileContent{
+							Inline: &extensionsv1alpha1.FileContentInline{
+								Data: `server = "https://server2"
+
+[host."https://mirror2/central"]
+  capabilities = ["pull", "resolve"]
+  override_path = true
+`,
+							},
+						},
+					},
+				))
 			})
 
 			It("should leave OperatingSystemConfig files unchanged when no configuration matches", func() {
@@ -163,13 +188,22 @@ var _ = Describe("Mutator", func() {
 			It("should add the containerd configuration to the OperatingSystemConfig", func() {
 				Expect(mutator.Mutate(ctx, osc, nil)).To(Succeed())
 
-				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(extensionsv1alpha1.RegistryConfig{
-					Upstream: "upstream1",
-					Server:   ptr.To("https://server1"),
-					Hosts: []extensionsv1alpha1.RegistryHost{
-						{URL: "https://mirror1-central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
+				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(
+					extensionsv1alpha1.RegistryConfig{
+						Upstream: "upstream1",
+						Server:   ptr.To("https://server1"),
+						Hosts: []extensionsv1alpha1.RegistryHost{
+							{URL: "https://mirror1-central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
+						},
 					},
-				}))
+					extensionsv1alpha1.RegistryConfig{
+						Upstream: "upstream2",
+						Server:   ptr.To("https://server2"),
+						Hosts: []extensionsv1alpha1.RegistryHost{
+							{URL: "https://mirror2/central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}, OverridePath: ptr.To(true)},
+						},
+					},
+				))
 			})
 
 			It("should leave already configured upstream unchanged", func() {
@@ -187,13 +221,22 @@ var _ = Describe("Mutator", func() {
 
 				Expect(mutator.Mutate(ctx, osc, nil)).To(Succeed())
 
-				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(extensionsv1alpha1.RegistryConfig{
-					Upstream: "upstream1",
-					Server:   ptr.To("https://server4"),
-					Hosts: []extensionsv1alpha1.RegistryHost{
-						{URL: "https://custom-mirror4", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
+				Expect(osc.Spec.CRIConfig.Containerd.Registries).To(ConsistOf(
+					extensionsv1alpha1.RegistryConfig{
+						Upstream: "upstream1",
+						Server:   ptr.To("https://server4"),
+						Hosts: []extensionsv1alpha1.RegistryHost{
+							{URL: "https://custom-mirror4", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}},
+						},
 					},
-				}))
+					extensionsv1alpha1.RegistryConfig{
+						Upstream: "upstream2",
+						Server:   ptr.To("https://server2"),
+						Hosts: []extensionsv1alpha1.RegistryHost{
+							{URL: "https://mirror2/central", Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}, OverridePath: ptr.To(true)},
+						},
+					},
+				))
 			})
 
 			It("should leave OperatingSystemConfig containerd unchanged when no configuration matches", func() {

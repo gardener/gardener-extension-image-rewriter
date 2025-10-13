@@ -7,6 +7,7 @@ package containerd_test
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/utils/ptr"
 
 	. "github.com/gardener/gardener-extension-image-rewriter/pkg/utils/containerd"
 )
@@ -40,6 +41,7 @@ var _ = Describe("RegistryMirror", func() {
 			mirror := RegistryMirror{
 				UpstreamServer: "https://upstream.example.com",
 				MirrorHost:     "https://mirror.example.com/v2/some/path",
+				OverridePath:   ptr.To(true),
 			}
 			expected := `server = "https://upstream.example.com"
 

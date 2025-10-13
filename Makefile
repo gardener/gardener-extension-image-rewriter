@@ -6,7 +6,6 @@ ENSURE_GARDENER_MOD         := $(shell go get github.com/gardener/gardener@$$(go
 GARDENER_HACK_DIR           := $(shell go list -m -f "{{.Dir}}" github.com/gardener/gardener)/hack
 EXTENSION_PREFIX            := gardener-extension
 NAME                        := image-rewriter
-ADMISSION_NAME              := $(NAME)-admission
 IMAGE                       := europe-docker.pkg.dev/gardener-project/public/gardener/extensions/image-rewriter
 REPO_ROOT                   := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 HACK_DIR                    := $(REPO_ROOT)/hack

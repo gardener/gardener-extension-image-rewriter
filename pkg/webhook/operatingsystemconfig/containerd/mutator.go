@@ -65,7 +65,13 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 			osc.Spec.CRIConfig.Containerd.Registries = append(osc.Spec.CRIConfig.Containerd.Registries, extensionsv1alpha1.RegistryConfig{
 				Upstream: upstreamConfig.Upstream,
 				Server:   ptr.To(upstreamConfig.Server),
-				Hosts:    []extensionsv1alpha1.RegistryHost{{URL: upstreamConfig.HostURL, Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability}}},
+				Hosts: []extensionsv1alpha1.RegistryHost{
+					{
+						URL:          upstreamConfig.HostURL,
+						Capabilities: []extensionsv1alpha1.RegistryCapability{extensionsv1alpha1.PullCapability, extensionsv1alpha1.ResolveCapability},
+						OverridePath: upstreamConfig.OverridePath,
+					},
+				},
 			})
 		}
 
@@ -74,6 +80,7 @@ func (m *mutator) Mutate(ctx context.Context, new, _ client.Object) error {
 			mirror := containerd.RegistryMirror{
 				UpstreamServer: upstreamConfig.Server,
 				MirrorHost:     upstreamConfig.HostURL,
+				OverridePath:   upstreamConfig.OverridePath,
 			}
 
 			log.V(2).Info("Adding registry mirror configuration for node provisioning", "upstream", upstreamConfig.Upstream)
