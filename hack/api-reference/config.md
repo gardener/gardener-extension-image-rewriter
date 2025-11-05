@@ -153,7 +153,8 @@ string
 </em>
 </td>
 <td>
-<p>Regions are the regions where the target image is located.</p>
+<em>(Optional)</em>
+<p>Regions are the regions where the target image is located. If not specified, any shoot region will match this host config.</p>
 </td>
 </tr>
 </tbody>

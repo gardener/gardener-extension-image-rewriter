@@ -30,6 +30,7 @@ var _ = Describe("Containerd", func() {
 							{URL: "https://mirror1-west", Provider: "local", Regions: []string{"west"}},
 							{URL: "https://mirror1-central", Provider: "local", Regions: []string{"central", "south", "north"}},
 							{URL: "https://mirror1-east", Provider: "local", Regions: []string{"east"}},
+							{URL: "https://mirror1-global", Provider: "global"},
 						},
 					},
 					{
@@ -100,6 +101,10 @@ var _ = Describe("Containerd", func() {
 
 				test("local2", "east", []UpStreamConfiguration{
 					{Upstream: "upstream3", Server: "https://server3", HostURL: "https://mirror3/east", OverridePath: ptr.To(true)},
+				})
+
+				test("global", "any-region", []UpStreamConfiguration{
+					{Upstream: "upstream1", Server: "https://server1", HostURL: "https://mirror1-global"},
 				})
 			})
 
