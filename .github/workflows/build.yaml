@@ -57,12 +57,50 @@ jobs:
         - ref: ocm-resource:gardener-extension-image-rewriter.tag
           attribute: image.tag
 
-  sast-lint:
-    uses: gardener/cc-utils/.github/workflows/sastlint-ocm.yaml@master
+  verify:
     permissions:
-      contents: read
-    with:
-      linter: gosec
-      run: make verify-extended
-      go-version: 1.24.4
-      setup-git-identity: true
+        contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.4'
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@master
+      - uses: gardener/cc-utils/.github/actions/setup-git-identity@master
+      - name: run-verify
+        run: |
+          set -eu
+          mkdir /tmp/blobs.d
+          make verify-extended |& tee /tmp/blobs.d/verify-log.txt
+          # verify-extended calls `make sast-report`, which generates `gosec-report.sarif`
+          tar czf /tmp/blobs.d/gosec-report.tar.gz gosec-report.sarif
+          tar czf /tmp/blobs.d/verify-log.tar.gz -C /tmp/blobs.d verify-log.txt
+      - name: add-reports-to-component-descriptor
+        uses: gardener/cc-utils/.github/actions/export-ocm-fragments@master
+        with:
+          blobs-directory: /tmp/blobs.d
+          ocm-resources: |
+            - name: gosec-report
+              relation: local
+              access:
+                type: localBlob
+                localReference: gosec-report.tar.gz
+              labels:
+                - name: gardener.cloud/purposes
+                  value:
+                    - lint
+                    - sast
+                    - gosec
+                - name: gardener.cloud/comment
+                  value: |
+                    we use gosec (linter) for SAST scans
+                    see: https://github.com/securego/gosec
+            - name: test-results
+              relation: local
+              access:
+                type: localBlob
+                localReference: verify-log.tar.gz
+              labels:
+                - name: gardener.cloud/purposes
+                  value:
+                    - test
