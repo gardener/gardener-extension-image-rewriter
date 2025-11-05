@@ -54,10 +54,6 @@ func ValidateConfiguration(config *v1alpha1.Configuration) field.ErrorList {
 				allErrs = append(allErrs, field.Required(fldTarget.Child("provider"), "provider must be specified"))
 			}
 
-			if len(target.Regions) == 0 {
-				allErrs = append(allErrs, field.Required(fldTarget.Child("regions"), "at least one region must be specified"))
-			}
-
 			for k, region := range target.Regions {
 				if region == "" {
 					allErrs = append(allErrs, field.Invalid(fldTarget.Child("regions").Index(k), region, "region must not be empty"))

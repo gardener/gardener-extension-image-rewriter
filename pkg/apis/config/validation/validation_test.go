@@ -60,9 +60,6 @@ var _ = Describe("Validation", func() {
 			})), PointTo(MatchFields(IgnoreExtras, Fields{
 				"Type":  Equal(field.ErrorTypeRequired),
 				"Field": Equal("overwrites[0].targets[0].provider"),
-			})), PointTo(MatchFields(IgnoreExtras, Fields{
-				"Type":  Equal(field.ErrorTypeRequired),
-				"Field": Equal("overwrites[0].targets[0].regions"),
 			}))))
 		})
 

@@ -30,13 +30,14 @@ type overwrite struct {
 
 type target struct {
 	regionToTarget map[string]string
+	globalTarget   string
 }
 
 // HasOverwrite checks if there is an overwrite for the given provider and region.
 func (c *configuration) HasOverwrite(provider string, region string) bool {
 	for _, overwrite := range c.overwrites {
 		if target, exists := overwrite.providerToTarget[provider]; exists {
-			if _, exists := target.regionToTarget[region]; exists {
+			if _, exists := target.regionToTarget[region]; exists || target.globalTarget != "" {
 				return true
 			}
 		}
@@ -64,8 +65,12 @@ func (c *configuration) FindTargetImage(sourceImage string, provider string, reg
 			continue
 		}
 
-		targetImage, imageConfigured := target.regionToTarget[region]
-		if !imageConfigured {
+		targetImage := target.regionToTarget[region]
+		if targetImage == "" {
+			targetImage = target.globalTarget
+		}
+
+		if targetImage == "" {
 			continue
 		}
 
@@ -92,6 +97,10 @@ func NewImageConfiguration(config *v1alpha1.Configuration) Configuration {
 
 			for _, region := range t.Regions {
 				providerToTarget[t.Provider].regionToTarget[region] = prefixOrImage(t.Image)
+			}
+
+			if len(t.Regions) == 0 {
+				providerToTarget[t.Provider] = target{globalTarget: prefixOrImage(t.Image)}
 			}
 		}
 
