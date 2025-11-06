@@ -38,6 +38,7 @@ type upstreamConfig struct {
 
 type hostConfig struct {
 	regionToURL map[string]string
+	globalURL   string
 }
 
 var hostWithPathPattern = regexp.MustCompile(`https?://[a-zA-Z0-9\.\-]+(/[^\s]*)+`)
@@ -48,7 +49,12 @@ func (c *configuration) GetUpstreamConfig(provider string, region string) []UpSt
 
 	for _, upstreamConf := range c.upstreamConfigs {
 		if hosts, providerExists := upstreamConf.providerToHosts[provider]; providerExists {
-			if hostURL, regionExists := hosts.regionToURL[region]; regionExists {
+			hostURL := hosts.regionToURL[region]
+			if hostURL == "" {
+				hostURL = hosts.globalURL
+			}
+
+			if hostURL != "" {
 				// If the host URL contains a path, override_path needs to be set to true, see https://github.com/containerd/containerd/blob/main/docs/hosts.md#override_path-field.
 				var overridePath *bool
 				if hostWithPathPattern.MatchString(hostURL) {
@@ -100,6 +106,10 @@ func createUpstreamConfig(containerdUpstreamConfig v1alpha1.ContainerdConfigurat
 			}
 
 			upstream.providerToHosts[host.Provider].regionToURL[region] = host.URL
+		}
+
+		if len(host.Regions) == 0 {
+			upstream.providerToHosts[host.Provider] = hostConfig{globalURL: host.URL}
 		}
 	}
 

@@ -44,6 +44,10 @@ var _ = Describe("Image", func() {
 							Provider: "local",
 							Regions:  []string{"east"},
 						},
+						{
+							Image:    v1alpha1.Image{Image: imageReplacement("global")},
+							Provider: "global",
+						},
 					},
 				},
 			},
@@ -101,6 +105,11 @@ var _ = Describe("Image", func() {
 			Expect(imageConfig.FindTargetImage(image, "local3", "west")).To(BeEmpty())
 			Expect(imageConfig.FindTargetImage(image, "local", "central")).To(BeEmpty())
 		})
+
+		It("should find the target for any region if no regions are specified", func() {
+			expectedTargetImageGlobal := ptr.Deref(imageReplacement("global"), "")
+			Expect(imageConfig.FindTargetImage(image, "global", "any-region")).To(Equal(expectedTargetImageGlobal))
+		})
 	})
 
 	Describe("#HasOverwrite", func() {
@@ -111,6 +120,10 @@ var _ = Describe("Image", func() {
 		It("should return true if an overwrite exists for the given image, provider, and region", func() {
 			Expect(imageConfig.HasOverwrite("local", "west")).To(BeTrue())
 			Expect(imageConfig.HasOverwrite("local", "east")).To(BeTrue())
+		})
+
+		It("should return true if an overwrite exists for the given image, provider, for any region", func() {
+			Expect(imageConfig.HasOverwrite("global", "any-region")).To(BeTrue())
 		})
 
 		It("should return false if no overwrite exists for the given image, provider, and region", func() {
