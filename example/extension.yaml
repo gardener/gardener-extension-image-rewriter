@@ -9,7 +9,7 @@ spec:
     extension:
       helm:
         ociRepository:
-          ref: europe-docker.pkg.dev/gardener-project/public/charts/gardener/extensions/image-rewriter:v0.7.0-dev
+          ref: europe-docker.pkg.dev/gardener-project/public/charts/gardener/extensions/image-rewriter:v0.8.0-dev
   resources:
   - kind: Extension
     lifecycle:
