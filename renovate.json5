@@ -27,6 +27,15 @@ The following dependencies have been updated:\n\
       groupName: "open-component-model",
       matchPackageNames: ["ocm.software/open-component-model/"],
     },
+    // Keep gardener/gardener and API modules in lockstep.
+    {
+      matchDatasources: ["go"],
+      groupName: "gardener-gardener",
+      matchPackageNames: [
+        "github.com/gardener/gardener",
+        "github.com/gardener/gardener/pkg/apis"
+      ]
+    },
     // The following list of dependencies is updated by `make generate` and restricts updates to type `patch`.
     // DO NOT EDIT THIS SECTION MANUALLY.
     {
