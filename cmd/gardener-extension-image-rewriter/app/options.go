@@ -43,6 +43,7 @@ func NewOptions() *Options {
 		"image-rewriter",
 		controller.ShootWebhooksResourceName,
 		nil,
+		nil,
 		webhookServerOptions,
 		webhookSwitches,
 	)

@@ -94,7 +94,7 @@ func (o *Options) run(ctx context.Context) error {
 	o.extensionOptions.Completed().Apply(&podwebhook.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&imagewebhook.DefaultAddOptions.Config)
 	o.extensionOptions.Completed().Apply(&containerdwebhook.DefaultAddOptions.Config)
-	shootWebhookConfig, err := o.webhookOptions.Completed().AddToManager(ctx, mgr, nil, false)
+	shootWebhookConfig, err := o.webhookOptions.Completed().AddToManager(ctx, mgr, nil)
 	if err != nil {
 		return fmt.Errorf("could not add the mutating webhook to manager: %w", err)
 	}
