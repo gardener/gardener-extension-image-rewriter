@@ -65,7 +65,7 @@ check: $(GOIMPORTS) $(GOLANGCI_LINT) $(HELM) $(YQ)
 	@REPO_ROOT=$(REPO_ROOT) bash $(GARDENER_HACK_DIR)/check.sh --golangci-lint-config=./.golangci.yaml ./cmd/... ./pkg/... ./test/...
 	@REPO_ROOT=$(REPO_ROOT) bash $(GARDENER_HACK_DIR)/check-charts.sh ./charts
 
-tools-for-generate: $(CONTROLLER_GEN) $(EXTENSION_GEN) $(GEN_CRD_API_REFERENCE_DOCS) $(HELM) $(KUSTOMIZE) $(YQ)
+tools-for-generate: $(CONTROLLER_GEN) $(CRD_REF_DOCS) $(EXTENSION_GEN) $(HELM) $(KUSTOMIZE) $(YQ)
 	@go mod download
 
 .PHONY: generate

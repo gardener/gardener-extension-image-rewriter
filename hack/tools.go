@@ -11,7 +11,7 @@ package tools
 import (
 	_ "github.com/gardener/gardener/hack"
 
-	_ "github.com/ahmetb/gen-crd-api-reference-docs"
+	_ "github.com/elastic/crd-ref-docs"
 	_ "golang.org/x/tools/cmd/goimports"
 	_ "k8s.io/code-generator"
 )

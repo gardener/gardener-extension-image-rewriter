@@ -39,6 +39,7 @@ The following dependencies have been updated:\n\
       matchUpdateTypes: ["major", "minor"],
       enabled: false,
       matchPackageNames: [ // GENERATOR-PIN
+        "github.com/elastic/crd-ref-docs",
         "github.com/go-logr/logr",
         "github.com/onsi/ginkgo/v2",
         "github.com/onsi/gomega",
@@ -89,7 +90,6 @@ The following dependencies have been updated:\n\
         "github.com/coreos/go-systemd/v22",
         "github.com/cyphar/filepath-securejoin",
         "github.com/davecgh/go-spew",
-        "github.com/elastic/crd-ref-docs",
         "github.com/elliotchance/orderedmap/v3",
         "github.com/emicklei/go-restful/v3",
         "github.com/evanphx/json-patch/v5",
@@ -169,7 +169,6 @@ The following dependencies have been updated:\n\
         "github.com/prometheus/otlptranslator",
         "github.com/prometheus/procfs",
         "github.com/prometheus/sigv4",
-        "github.com/russross/blackfriday/v2",
         "github.com/santhosh-tekuri/jsonschema/v6",
         "github.com/shopspring/decimal",
         "github.com/sirupsen/logrus",

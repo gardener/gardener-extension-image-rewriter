@@ -4,17 +4,20 @@
 <a href="#config.image-rewriter.extensions.gardener.cloud%2fv1alpha1">config.image-rewriter.extensions.gardener.cloud/v1alpha1</a>
 </li>
 </ul>
+
 <h2 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1">config.image-rewriter.extensions.gardener.cloud/v1alpha1</h2>
 <p>
-<p>Package v1alpha1 is a version of the API.</p>
+
 </p>
-Resource Types:
-<ul></ul>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.Configuration">Configuration
+
+<h3 id="configuration">Configuration
 </h3>
+
+
 <p>
-<p>Configuration contains information about the registry service configuration.</p>
+Configuration contains information about the registry service configuration.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -23,13 +26,12 @@ Resource Types:
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
 <code>containerd</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">
-[]ContainerdConfiguration
-</a>
+<a href="#containerdconfiguration">ContainerdConfiguration</a> array
 </em>
 </td>
 <td>
@@ -41,9 +43,7 @@ Resource Types:
 <td>
 <code>overwrites</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ImageOverwrite">
-[]ImageOverwrite
-</a>
+<a href="#imageoverwrite">ImageOverwrite</a> array
 </em>
 </td>
 <td>
@@ -51,17 +51,23 @@ Resource Types:
 <p>Overwrites configure the source and target images that should be replaced.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">ContainerdConfiguration
+
+
+<h3 id="containerdconfiguration">ContainerdConfiguration
 </h3>
+
+
 <p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.Configuration">Configuration</a>)
+(<em>Appears on:</em><a href="#configuration">Configuration</a>)
 </p>
+
 <p>
-<p>ContainerdConfiguration contains information about a containerd upstream configuration.</p>
+ContainerdConfiguration contains information about a containerd upstream configuration.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -70,6 +76,7 @@ Resource Types:
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
 <code>upstream</code></br>
@@ -96,26 +103,30 @@ string
 <td>
 <code>hosts</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdHostConfig">
-[]ContainerdHostConfig
-</a>
+<a href="#containerdhostconfig">ContainerdHostConfig</a> array
 </em>
 </td>
 <td>
 <p>Hosts are the containerd hosts separated by provider and regions.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdHostConfig">ContainerdHostConfig
+
+
+<h3 id="containerdhostconfig">ContainerdHostConfig
 </h3>
+
+
 <p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ContainerdConfiguration">ContainerdConfiguration</a>)
+(<em>Appears on:</em><a href="#containerdconfiguration">ContainerdConfiguration</a>)
 </p>
+
 <p>
-<p>ContainerdHostConfig contains information about a containerd host configuration.</p>
+ContainerdHostConfig contains information about a containerd host configuration.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -124,6 +135,7 @@ string
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
 <code>url</code></br>
@@ -132,6 +144,7 @@ string
 </em>
 </td>
 <td>
+<p></p>
 </td>
 </tr>
 <tr>
@@ -149,7 +162,7 @@ string
 <td>
 <code>regions</code></br>
 <em>
-[]string
+string array
 </em>
 </td>
 <td>
@@ -157,18 +170,23 @@ string
 <p>Regions are the regions where the target image is located. If not specified, any shoot region will match this host config.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.Image">Image
+
+
+<h3 id="image">Image
 </h3>
+
+
 <p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ImageOverwrite">ImageOverwrite</a>, 
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.TargetConfiguration">TargetConfiguration</a>)
+(<em>Appears on:</em><a href="#imageoverwrite">ImageOverwrite</a>, <a href="#targetconfiguration">TargetConfiguration</a>)
 </p>
+
 <p>
-<p>Image contains information about an image.</p>
+Image contains information about an image.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -177,6 +195,7 @@ string
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
 <code>image</code></br>
@@ -201,17 +220,23 @@ string
 <p>Prefix is the prefix of the target image to relace the source with.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.ImageOverwrite">ImageOverwrite
+
+
+<h3 id="imageoverwrite">ImageOverwrite
 </h3>
+
+
 <p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.Configuration">Configuration</a>)
+(<em>Appears on:</em><a href="#configuration">Configuration</a>)
 </p>
+
 <p>
-<p>ImageOverwrite contains information about an image overwrite configuration.</p>
+ImageOverwrite contains information about an image overwrite configuration.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -220,13 +245,12 @@ string
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
 <code>source</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.Image">
-Image
-</a>
+<a href="#image">Image</a>
 </em>
 </td>
 <td>
@@ -237,26 +261,30 @@ Image
 <td>
 <code>targets</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.TargetConfiguration">
-[]TargetConfiguration
-</a>
+<a href="#targetconfiguration">TargetConfiguration</a> array
 </em>
 </td>
 <td>
 <p>Targets are the target images to replace the source with.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<h3 id="config.image-rewriter.extensions.gardener.cloud/v1alpha1.TargetConfiguration">TargetConfiguration
+
+
+<h3 id="targetconfiguration">TargetConfiguration
 </h3>
+
+
 <p>
-(<em>Appears on:</em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.ImageOverwrite">ImageOverwrite</a>)
+(<em>Appears on:</em><a href="#imageoverwrite">ImageOverwrite</a>)
 </p>
+
 <p>
-<p>TargetConfiguration contains information about the target image configuration.</p>
+TargetConfiguration contains information about the target image configuration.
 </p>
+
 <table>
 <thead>
 <tr>
@@ -265,19 +293,29 @@ Image
 </tr>
 </thead>
 <tbody>
+
 <tr>
 <td>
-<code>Image</code></br>
+<code>image</code></br>
 <em>
-<a href="#config.image-rewriter.extensions.gardener.cloud/v1alpha1.Image">
-Image
-</a>
+string
 </em>
 </td>
 <td>
-<p>
-(Members of <code>Image</code> are embedded into this type.)
-</p>
+<em>(Optional)</em>
+<p>Image is the target image string to relace the source with.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>prefix</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Prefix is the prefix of the target image to relace the source with.</p>
 </td>
 </tr>
 <tr>
@@ -295,7 +333,7 @@ string
 <td>
 <code>regions</code></br>
 <em>
-[]string
+string array
 </em>
 </td>
 <td>
@@ -303,9 +341,8 @@ string
 <p>Regions are the regions where the target image is located. If not specified, any shoot region will match this target config.</p>
 </td>
 </tr>
+
 </tbody>
 </table>
-<hr/>
-<p><em>
-Generated with <a href="https://github.com/ahmetb/gen-crd-api-reference-docs">gen-crd-api-reference-docs</a>
-</em></p>
+
+
