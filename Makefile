@@ -72,7 +72,7 @@ tools-for-generate: $(CONTROLLER_GEN) $(EXTENSION_GEN) $(GEN_CRD_API_REFERENCE_D
 generate: tools-for-generate
 	@REPO_ROOT=$(REPO_ROOT) GARDENER_HACK_DIR=$(GARDENER_HACK_DIR) bash $(GARDENER_HACK_DIR)/generate-sequential.sh ./charts/... ./example/... ./cmd/... ./pkg/...
 	@REPO_ROOT=$(REPO_ROOT) GARDENER_HACK_DIR=$(GARDENER_HACK_DIR) $(REPO_ROOT)/hack/update-codegen.sh
-	@GARDENER_HACK_DIR=$(GARDENER_HACK_DIR) bash ./hack/generate-renovate-ignore-deps.sh
+	@ARRAY_KEY=matchPackageNames NEEDLE='// GENERATOR-PIN' GARDENER_HACK_DIR=$(GARDENER_HACK_DIR) EXCLUDE_DEPS=github.com/gardener/garener/pkg/apis bash $(GARDENER_HACK_DIR)/generate-renovate-ignore-deps.sh
 
 .PHONY: format
 format: $(GOIMPORTS) $(GOIMPORTSREVISER)
