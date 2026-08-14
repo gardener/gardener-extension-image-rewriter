@@ -9,7 +9,7 @@
 package tools
 
 import (
-	_ "github.com/gardener/gardener/hack"
+	_ "github.com/gardener/gardener/hack/tools"
 
 	_ "github.com/elastic/crd-ref-docs"
 	_ "golang.org/x/tools/cmd/goimports"
