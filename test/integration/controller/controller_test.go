@@ -66,7 +66,7 @@ var _ = Describe("Cluster controller test", func() {
 				CloudProfile: runtime.RawExtension{
 					Raw: []byte(`{}`),
 				},
-				Seed: runtime.RawExtension{
+				Seed: &runtime.RawExtension{
 					Raw: []byte(`{}`),
 				},
 			},
