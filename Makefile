@@ -20,6 +20,10 @@ ifneq ($(strip $(shell git status --porcelain 2>/dev/null)),)
 	EFFECTIVE_VERSION := $(EFFECTIVE_VERSION)-dirty
 endif
 
+# Use a specific Go toolchain version to ensure consistent builds across different environments.
+# renovate: datasource=golang-version depName=go
+export GOTOOLCHAIN := go1.26.7
+
 #########################################
 # Tools                                 #
 #########################################

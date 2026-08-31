@@ -15,6 +15,18 @@ The following dependencies have been updated:\n\
 - `{{upgrade.depName}}` from `{{upgrade.currentVersion}}` to `{{upgrade.newVersion}}`. {{#if (equals upgrade.datasource 'github-releases')}}[Release Notes](https://github.com/{{upgrade.depName}}/releases/tag/{{upgrade.newVersion}}){{/if}}\n\
 {{/each}}\n\
 ```",
+  customManagers: [
+    {
+      // Detection for GOTOOLCHAIN in Makefile (does not match the _VERSION pattern of the ci-infra preset).
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^Makefile$/',
+      ],
+      matchStrings: [
+        '# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)\\s+export GOTOOLCHAIN\\s*\\??=\\s*go(?<currentValue>[^\\s]+)',
+      ],
+    }
+  ],
   packageRules: [
     // Keep gardener modules in lockstep.
     {
