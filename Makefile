@@ -22,7 +22,7 @@ endif
 
 # Use a specific Go toolchain version to ensure consistent builds across different environments.
 # renovate: datasource=golang-version depName=go
-export GOTOOLCHAIN := go1.26.7
+export GOTOOLCHAIN := go1.26.8
 
 #########################################
 # Tools                                 #
