@@ -12,7 +12,7 @@ import (
 
 // Configuration contains information about the registry service configuration.
 type Configuration struct {
-	metav1.TypeMeta `json:",inline"`
+	metav1.TypeMeta `json:",embed"`
 
 	// ContainerdConfiguration contains the containerd configuration for the image rewriter.
 	// +optional
