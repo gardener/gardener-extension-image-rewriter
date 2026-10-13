@@ -4,10 +4,6 @@
     'github>gardener/gardener//.github/renovate.json5',
     'github>gardener/ci-infra//config/renovate/group-go-updates.json5',
   ],
-  postUpgradeTasks: {
-    commands: ['make generate'],
-    fileFilters: ['.github/**', 'pkg/**', 'docs/**'],
-  },
   prFooter: "**Release note**:\n\
 ```other dependency\n\
 The following dependencies have been updated:\n\
